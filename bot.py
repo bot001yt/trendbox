@@ -3,6 +3,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from google_sheets import add_venta
+from datetime import datetime
+
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD_ID = discord.Object(id=1350837211209138298)  # Reemplaza con el ID de tu servidor
@@ -57,11 +59,12 @@ async def addventa(
 
 
 # --- COMANDO VOUCH ---
-@bot.tree.command(name="vouch", description="Leave a vouch", guild=GUILD_ID)
+@bot.tree.command(name="vouch", description="Leave a vouch for a product", guild=GUILD_ID)
 @app_commands.describe(
-    product="Product's name",
-    stars="Stars",
-    payment_method="Payment method"
+    product="Name of the product",
+    stars="Rating (stars)",
+    payment_method="Payment method used",
+    comment="Additional comment or review"
 )
 @app_commands.choices(
     stars=[
@@ -72,18 +75,31 @@ async def addventa(
         app_commands.Choice(name="⭐⭐⭐⭐⭐", value="⭐⭐⭐⭐⭐"),
     ]
 )
-async def vouch(interaction: discord.Interaction, product: str, stars: app_commands.Choice[str], payment_method: str):
+async def vouch(
+    interaction: discord.Interaction,
+    product: str,
+    stars: app_commands.Choice[str],
+    payment_method: str,
+    comment: str
+):
+    user = interaction.user
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     embed = discord.Embed(
-        title="📝 Nuevo Vouch",
-        description=(
-            f"**Product:** {product}\n"
-            f"**Stars:** {stars.value}\n"
-            f"**Payment Method:** {payment_method}"
-        ),
+        title="✅ New vouch created!",
         color=discord.Color.green()
     )
-    embed.set_footer(text=f"Leaved by {interaction.user.name}")
+    embed.add_field(name="⭐ Rating", value=stars.value, inline=False)
+    embed.add_field(name="💬 Vouch", value=comment, inline=False)
+    embed.add_field(name="🛍️ Product", value=product, inline=True)
+    embed.add_field(name="💳 Payment Method", value=payment_method, inline=True)
+    embed.add_field(name="👤 Vouched by", value=f"{user.mention}", inline=True)
+    embed.add_field(name="📅 Vouched at", value=now, inline=True)
+    embed.set_thumbnail(url=user.display_avatar.url)
+    embed.set_footer(text="Service provided by myvouch.es")
+
     await interaction.response.send_message(embed=embed)
+
 
 
 # Ejecuta el bot con tu token
