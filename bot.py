@@ -1,28 +1,28 @@
 import discord
-from discord.ext import commands
 from discord import app_commands
+from discord.ext import commands
 import os
-from google_sheets import add_venta  # Asegúrate de tenerlo correcto
+from google_sheets import add_venta
 
-# Configura el bot
+# Define el ID de tu servidor y el ID del rol permitido
+GUILD_ID = discord.Object(id=123456789012345678)  # Reemplaza por el ID de tu servidor
+OWNER_ROLE_ID = 1350837706103722095  # ID del rol que puede usar el comando
+
 intents = discord.Intents.default()
+intents.message_content = False  # No es necesario para slash commands
 bot = commands.Bot(command_prefix="!", intents=intents)
-tree = bot.tree  # Ya viene incluido en discord.Bot
 
-# Evento al iniciar el bot
 @bot.event
 async def on_ready():
-    await tree.sync()
+    await bot.tree.sync(guild=GUILD_ID)
     print(f"✅ Bot conectado como {bot.user}")
 
-# Slash command con campos + restricción de rol
-@app_commands.checks.has_role("1350837706103722095")
-@tree.command(name="addventa", description="Registrar una venta en el Excel")
+@bot.tree.command(name="addventa", description="Registrar una venta en el Excel", guild=GUILD_ID)
 @app_commands.describe(
-    fecha="Fecha de la venta (DD/MM/AAAA)",
+    fecha="Fecha de la venta",
     categoria="Categoría del producto",
     producto="Nombre del producto",
-    proveedor="Proveedor",
+    proveedor="Proveedor del producto",
     compra="Precio de compra",
     venta="Precio de venta",
     canal="Canal de venta",
@@ -39,20 +39,17 @@ async def addventa(
     canal: str,
     estado: str
 ):
+    # Verifica si el usuario tiene el rol correcto
+    if not any(role.id == OWNER_ROLE_ID for role in interaction.user.roles):
+        await interaction.response.send_message("❌ No tienes permisos para usar este comando.", ephemeral=True)
+        return
+
     try:
         add_venta(fecha, categoria, producto, proveedor, compra, venta, canal, estado)
-        await interaction.response.send_message("✅ Venta registrada correctamente.", ephemeral=True)
+        await interaction.response.send_message("✅ Venta registrada correctamente.")
     except Exception as e:
-        await interaction.response.send_message(f"❌ Error al registrar la venta: {e}", ephemeral=True)
+        await interaction.response.send_message(f"❌ Error al registrar la venta: {e}")
 
-# Gestión de errores por permisos
-@addventa.error
-async def on_addventa_error(interaction: discord.Interaction, error):
-    if isinstance(error, app_commands.errors.MissingRole):
-        await interaction.response.send_message("❌ No tienes permisos para usar este comando.", ephemeral=True)
-    else:
-        await interaction.response.send_message(f"❌ Ocurrió un error: {error}", ephemeral=True)
-
-
+# Ejecuta el bot con tu token
 bot.run(os.environ["TOKEN"])
 
