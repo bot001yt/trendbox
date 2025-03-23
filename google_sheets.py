@@ -4,7 +4,7 @@ import os
 from google.oauth2.service_account import Credentials
 
 # Columnas: Fecha, Categoría, Producto, Proveedor, Precio Compra, Precio Venta, Beneficio, Canal, Estado
-def add_sale_row(fecha, categoria, producto, proveedor, compra, venta, canal, estado):
+def add_venta(fecha, categoria, producto, proveedor, compra, venta, canal, estado):
     # Leer la variable GOOGLE_CREDENTIALS desde Railway
     creds_json = os.getenv("GOOGLE_CREDENTIALS")
     creds_dict = json.loads(creds_json)
