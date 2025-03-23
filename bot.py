@@ -40,7 +40,7 @@ async def addventa(
     estado: str
 ):
     # Verifica si el usuario tiene el rol correcto
-    if not any(role.id == OWNER_ROLE_ID for role in interaction.user.roles):
+    if not any(role.id == 1350837706103722095 for role in interaction.user.roles):
         await interaction.response.send_message("❌ No tienes permisos para usar este comando.", ephemeral=True)
         return
 
