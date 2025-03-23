@@ -7,14 +7,13 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
-tree = app_commands.CommandTree(bot)
 
 @bot.event
 async def on_ready():
-    await tree.sync()
+    await bot.tree.sync()
     print(f"✅ Bot conectado como {bot.user}")
 
-@tree.command(name="addventa", description="Registrar una venta en el Excel")
+@bot.tree.command(name="addventa", description="Registrar una venta en el Excel")
 @app_commands.describe(
     fecha="Fecha de la venta (DD/MM/AAAA)",
     categoria="Categoría del producto",
@@ -42,3 +41,4 @@ async def addventa(interaction: discord.Interaction,
         await interaction.response.send_message(f"❌ Error al registrar la venta: {e}", ephemeral=True)
 
 bot.run("TOKEN")
+
