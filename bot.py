@@ -5,7 +5,7 @@ import os
 from google_sheets import add_venta
 
 # Define el ID de tu servidor y el ID del rol permitido
-GUILD_ID = discord.Object(id=123456789012345678)  # Reemplaza por el ID de tu servidor
+GUILD_ID = discord.Object(id=1350837211209138298)  # Reemplaza por el ID de tu servidor
 OWNER_ROLE_ID = 1350837706103722095  # ID del rol que puede usar el comando
 
 intents = discord.Intents.default()
@@ -40,7 +40,7 @@ async def addventa(
     estado: str
 ):
     # Verifica si el usuario tiene el rol correcto
-    if not any(role.id == 1350837706103722095 for role in interaction.user.roles):
+    if not any(role.id == OWNER_ROLE_ID for role in interaction.user.roles):
         await interaction.response.send_message("❌ No tienes permisos para usar este comando.", ephemeral=True)
         return
 
