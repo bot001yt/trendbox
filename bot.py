@@ -22,10 +22,11 @@ async def ping(ctx):
 @bot.command()
 async def addventa(ctx, fecha, categoria, producto, proveedor, compra, venta, canal, estado):
     try:
-       add_venta(fecha, categoria, producto, proveedor, compra, venta, canal, estado)
+        add_venta(fecha, categoria, producto, proveedor, compra, venta, canal, estado)
         await ctx.send("✅ Venta registrada correctamente.")
     except Exception as e:
         await ctx.send(f"❌ Error al registrar la venta: {e}")
+
 
 
 bot.run(TOKEN)
