@@ -28,5 +28,4 @@ async def addventa(ctx, fecha, categoria, producto, proveedor, compra, venta, ca
         await ctx.send(f"❌ Error al registrar la venta: {e}")
 
 
-
 bot.run(TOKEN)
