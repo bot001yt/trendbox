@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from google_sheets import add_venta
 import os
 
 
