@@ -27,7 +27,6 @@ def add_venta(fecha, categoria, producto, proveedor, compra, venta, canal, estad
         row = [fecha, categoria, producto, proveedor, compra, venta, beneficio, canal, estado]
         sheet.append_row(row)
 
-   except Exception as e:
-    print(f"Error al añadir la venta: {e}")
-    # raise e  ← ❌ Esto es lo que debes eliminar
-
+    except Exception as e:
+        print(f"Error al añadir la venta: {e}")
+        # No relanzamos la excepción para evitar errores molestos en Discord
