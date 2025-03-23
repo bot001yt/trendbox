@@ -17,7 +17,7 @@ async def on_ready():
     await bot.tree.sync(guild=GUILD_ID)
     print(f"✅ Bot conectado como {bot.user}")
 
-@bot.tree.command(name="addventa", description="Registrar una venta en el Excel", guild=GUILD_ID)
+@bot.tree.command(name="addventa", description="Registrar una venta", guild=GUILD_ID)
 @app_commands.describe(
     fecha="Fecha de la venta",
     categoria="Categoría del producto",
