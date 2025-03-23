@@ -1,24 +1,32 @@
-import gspread
-import json
 import os
-from google.oauth2.service_account import Credentials
+import json
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
-# Columnas: Fecha, Categoría, Producto, Proveedor, Precio Compra, Precio Venta, Beneficio, Canal, Estado
 def add_venta(fecha, categoria, producto, proveedor, compra, venta, canal, estado):
-    # Leer la variable GOOGLE_CREDENTIALS desde Railway
-    creds_json = os.getenv("GOOGLE_CREDENTIALS")
-    creds_dict = json.loads(creds_json)
-    creds = Credentials.from_service_account_info(creds_dict)
+    try:
+        # Define el alcance (scopes)
+        scope = [
+            "https://spreadsheets.google.com/feeds",
+            "https://www.googleapis.com/auth/drive"
+        ]
 
-    # Autorizar cliente
-    client = gspread.authorize(creds)
+        # Carga las credenciales desde la variable de entorno
+        credentials_json = os.getenv("GOOGLE_CREDENTIALS")
+        creds_dict = json.loads(credentials_json)
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 
-    # Abrir la hoja de cálculo (ajusta el nombre si es distinto)
-    sheet = client.open("Registro de Ventas").sheet1
+        # Autoriza y abre el documento
+        client = gspread.authorize(creds)
+        sheet = client.open("Registro de Ventas").sheet1  # Asegúrate de que el nombre coincide
 
-    # Calcular beneficio
-    beneficio = float(venta) - float(compra)
+        # Calcula beneficio
+        beneficio = float(venta) - float(compra)
 
-    # Crear fila y añadirla
-    fila = [fecha, categoria, producto, proveedor, compra, venta, beneficio, canal, estado]
-    sheet.append_row(fila, value_input_option="USER_ENTERED")
+        # Prepara y añade la fila
+        row = [fecha, categoria, producto, proveedor, compra, venta, beneficio, canal, estado]
+        sheet.append_row(row)
+
+    except Exception as e:
+        print(f"Error al añadir la venta: {e}")
+        raise e
