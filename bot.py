@@ -13,7 +13,7 @@ ROL_AUTORIZADO_ID = 1350837706103722095  # ID del rol que puede usar /addventa
 
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
-
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 @bot.event
 async def on_ready():
@@ -99,8 +99,6 @@ async def vouch(
     embed.set_thumbnail(url=user.display_avatar.url)
     embed.set_footer(text="Service provided by Trendbox")
 
-
-    openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @bot.event
 async def on_message(message):
