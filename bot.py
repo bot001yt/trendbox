@@ -154,25 +154,18 @@ async def on_message(message):
         return
 
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_msg},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=300,
-            temperature=0.7
-        )
+        client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-        reply = response["choices"][0]["message"]["content"]
-        await message.channel.send(reply)
-
-    except Exception as e:
-        await message.channel.send(f"❌ Error with AI response: {e}")
-
-
-    await interaction.response.send_message(embed=embed)
-
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "system", "content": system_msg},
+        {"role": "user", "content": prompt}
+    ],
+    max_tokens=300,
+    temperature=0.7
+)
+reply = response.choices[0].message.content
 
 
 # Ejecuta el bot con tu token
