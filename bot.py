@@ -4,7 +4,7 @@ from discord import app_commands
 from discord.ext import commands
 from google_sheets import add_venta
 from datetime import datetime
-import openai
+from openai import OpenAI
 import json
 
 TOKEN = os.getenv("DISCORD_TOKEN")
