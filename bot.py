@@ -114,14 +114,14 @@ async def on_message(message):
     category = message.channel.category.name.lower() if message.channel.category else ""
 
     # Define el contexto según la categoría del ticket
-    if "replace" in category:
+    if "REPLACE" in category:
         system_msg = (
             "You are a professional support assistant at TrendBox. The user is here because their subscription stopped working, expired, or the password doesn't work (usually Netflix or Crunchyroll). "
             "Reassure them that the replacement process is fast and handled as soon as possible. "
             "Politely explain the process, and if more details are needed (e.g., email used, screenshot), ask for them. "
             "Keep a calm, professional tone, but if they speak Spanish, you may add friendly words like 'vale', 'no te preocupes', or 'te ayudamos enseguida'."
         )
-    elif "support" in category:
+    elif "SUPPORT" in category:
         system_msg = (
             "You are a professional support agent from TrendBox. This user needs help with something general. "
             "Try to extract information from the initial embed message in the ticket, and based on that:\n\n"
@@ -129,7 +129,7 @@ async def on_message(message):
             "- If it's unclear: ask politely for more information. Your goal is to respond helpfully, clearly, and always keep the conversation moving forward.\n\n"
             "If the user writes in Spanish, adapt your tone accordingly and be more casual with expressions like 'tío' or 'perfe'."
         )
-    elif "buy" in category:
+    elif "BUYING" in category:
         system_msg = (
             "You are a direct and persuasive salesperson from TrendBox. If the user speaks Spanish, use friendly expressions like 'tío' or 'perfe'. "
             "Your goal is to help them complete a purchase.\n\n"
