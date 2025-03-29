@@ -107,13 +107,11 @@ async def on_message(message):
     if message.author.bot:
         return
 
+    # Solo responde si se le menciona
     if not message.content.startswith(f"<@{bot.user.id}>") and not message.content.startswith(f"<@!{bot.user.id}>"):
         return
 
-    if not message.channel.name.startswith("ticket-"):
-        return
-
-    category = message.channel.category.name.lower()
+    category = message.channel.category.name.lower() if message.channel.category else ""
 
     # Define el contexto según la categoría del ticket
     if "replace" in category:
