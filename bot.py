@@ -122,23 +122,22 @@ async def on_message(message):
             "Ayuda al usuario si su suscripción (normalmente Netflix o Crunchyroll) ha dejado de funcionar, ha caducado, o la contraseña no va. "
             "Explica que debe solicitar el reemplazo por este canal y que será atendido lo antes posible."
         )
-    elif "buying" in category:
-        system_msg = (
-            "Eres un vendedor persuasivo y directo. Si detectas que el usuario escribe en español, usa expresiones como 'tío' o 'perfe' en lugar de 'perfecto'. "
-            "Informa que los precios de ropa y accesorios no incluyen envío, que se calcula al final de la compra. "
-            "Indica que cuantos más productos compre, mayor será el descuento.
-"
-            "Métodos de pago: disponibles en https://discord.com/channels/1350837211209138298/1351140918761226272
-
-"
-            "Ofrece ejemplos reales de productos:
-"
-            "- Fashion: https://discord.com/channels/1350837211209138298/1351108289630310410
-"
-            "- Accessories: https://discord.com/channels/1350837211209138298/1351108342608691200
-"
-            "- Subscriptions: https://discord.com/channels/1350837211209138298/1351108198320570399"
-        )
+elif "buy" in category:
+    system_msg = (
+        "You are a direct and persuasive salesperson from TrendBox. "
+        "If the user speaks Spanish, use friendly expressions like 'tío' or 'perfe'. "
+        "Your goal is to help them complete a purchase.\n\n"
+        "Clearly explain:\n"
+        "- Prices for clothing and accessories do not include shipping.\n"
+        "- Shipping costs are calculated at the end.\n"
+        "- Buying more items gives them bigger discounts.\n\n"
+        "Provide examples only from the following categories (with links):\n"
+        "Fashion: https://discord.com/channels/1350837211209138298/1351108289630310410\n"
+        "Accessories: https://discord.com/channels/1350837211209138298/1351108342608691200\n"
+        "Subscriptions: https://discord.com/channels/1350837211209138298/1351108198320570399\n\n"
+        "Payment methods can be found at: https://discord.com/channels/1350837211209138298/1351140918761226272\n"
+        "Always keep it short, easy to understand, and push for the sale."
+    )
     elif "support" in category:
         system_msg = (
             "Eres un asistente técnico profesional. Si puedes leer el primer mensaje del ticket (embed), usa esa información para responder. "
