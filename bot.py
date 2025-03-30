@@ -6,6 +6,7 @@ from google_sheets import add_venta
 from datetime import datetime
 from openai import OpenAI
 import json
+import httpx
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD_ID = discord.Object(id=1350837211209138298)  # Reemplaza con el ID de tu servidor
@@ -13,7 +14,8 @@ ROL_AUTORIZADO_ID = 1350837706103722095  # ID del rol que puede usar /addventa
 
 intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+
 
 @bot.event
 async def on_ready():
@@ -111,34 +113,65 @@ async def on_message(message):
     category = message.channel.category.name.lower()
 
     if "replace" in category:
-        system_msg = "You are a professional support assistant at TrendBox. The user is here because their subscription stopped working, expired, or the password doesn't work (usually Netflix or Crunchyroll). Reassure them that the replacement process is fast and handled as soon as possible. Politely explain the process, and if more details are needed (e.g., email used, screenshot), ask for them. Keep a calm, professional tone, but if they speak Spanish, you may add friendly words like 'vale', 'no te preocupes', or 'te ayudamos enseguida'."
+        system_msg = (
+            "You are a professional support assistant at TrendBox. The user is here because their subscription stopped working, expired, or the password doesn't work (usually Netflix or Crunchyroll). "
+            "Reassure them that the replacement process is fast and handled as soon as possible. "
+            "Politely explain the process, and if more details are needed (e.g., email used, screenshot), ask for them. "
+            "Keep a calm, professional tone, but if they speak Spanish, you may add friendly words like 'vale', 'no te preocupes', or 'te ayudamos enseguida'."
+        )
     elif "buy" in category:
-        system_msg = "You are a direct and persuasive salesperson from TrendBox. If the user speaks Spanish, use friendly expressions like 'tío' or 'perfe'. Your goal is to help them complete a purchase. Clearly explain: Prices for clothing and accessories do not include shipping. Shipping costs are calculated at the end. Buying more items gives them bigger discounts. Provide examples only from the following categories (with links): Fashion: https://discord.com/channels/1350837211209138298/1351108289630310410 Accessories: https://discord.com/channels/1350837211209138298/1351108342608691200 Subscriptions: https://discord.com/channels/1350837211209138298/1351108198320570399 Payment methods can be found at: https://discord.com/channels/1350837211209138298/1351140918761226272 Always keep it short, easy to understand, and push for the sale."
+        system_msg = (
+            "You are a direct and persuasive salesperson from TrendBox. If the user speaks Spanish, use friendly expressions like 'tío' or 'perfe'. Your goal is to help them complete a purchase. "
+            "Clearly explain:\n"
+            "- Prices for clothing and accessories do not include shipping.\n"
+            "- Shipping costs are calculated at the end.\n"
+            "- Buying more items gives them bigger discounts.\n"
+            "Provide examples only from the following categories (with links):\n"
+            "- Fashion: https://discord.com/channels/1350837211209138298/1351108289630310410\n"
+            "- Accessories: https://discord.com/channels/1350837211209138298/1351108342608691200\n"
+            "- Subscriptions: https://discord.com/channels/1350837211209138298/1351108198320570399\n"
+            "Payment methods can be found at: https://discord.com/channels/1350837211209138298/1351140918761226272\n"
+            "Always keep it short, easy to understand, and push for the sale."
+        )
     elif "support" in category:
-        system_msg = "You are a professional support agent from TrendBox. This user needs help with something general. Try to extract information from the initial embed message in the ticket, and based on that: If it's clear: proceed with solving or escalating the issue. If it's unclear: ask politely for more information. Your goal is to respond helpfully, clearly, and always keep the conversation moving forward. If the user writes in Spanish, adapt your tone accordingly and be more casual with expressions like 'tío' or 'perfe'."
+        system_msg = (
+            "You are a professional support agent from TrendBox. This user needs help with something general. "
+            "Try to extract information from the initial embed message in the ticket, and based on that:\n"
+            "- If it's clear: proceed with solving or escalating the issue.\n"
+            "- If it's unclear: ask politely for more information.\n"
+            "Your goal is to respond helpfully, clearly, and always keep the conversation moving forward.\n"
+            "If the user writes in Spanish, adapt your tone accordingly and be more casual with expressions like 'tío' or 'perfe'."
+        )
     else:
-        system_msg = "You are a general assistant for TrendBox. Help the user as best as possible in a polite and concise way."
+        system_msg = "You are a helpful assistant from TrendBox."
 
     prompt = message.content.replace(f"<@{bot.user.id}>", "").replace(f"<@!{bot.user.id}>", "").strip()
     if not prompt:
         return
 
     try:
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_msg},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=300,
-            temperature=0.7
-        )
-
-        reply = response.choices[0].message.content
-        await message.channel.send(reply)
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "google/gemma-27b-it:free",
+                    "messages": [
+                        {"role": "system", "content": system_msg},
+                        {"role": "user", "content": prompt}
+                    ]
+                }
+            )
+            result = response.json()
+            reply = result["choices"][0]["message"]["content"]
+            await message.channel.send(reply)
 
     except Exception as e:
-        await message.channel.send(f"❌ Error with AI response:\n```{e}```")
+        await message.channel.send(f"❌ AI error: {e}")
+
 
 # Ejecuta el bot con tu token
 bot.run(os.environ["TOKEN"])
