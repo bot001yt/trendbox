@@ -141,6 +141,7 @@ async def on_message(message):
             "- If it's unclear: ask politely for more information.\n"
             "Your goal is to respond helpfully, clearly, and always keep the conversation moving forward.\n"
             "If the user writes in Spanish, adapt your tone accordingly and be more casual with expressions like 'tío' or 'perfe'."
+            "If it is something related to the product stopped working, say to them to open a replace ticket in https://discord.com/channels/1350837211209138298/1351136060415152169"
         )
     else:
         system_msg = "You are a helpful assistant from TrendBox."
