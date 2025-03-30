@@ -166,17 +166,14 @@ async def on_message(message):
                 }
             )
             result = response.json()
-            if "choices" in result and result["choices"]:
-    reply = result["choices"][0]["message"]["content"]
-    await message.channel.send(reply)
-elif "error" in result:
-    error_msg = result["error"].get("message", "Unknown error")
-    await message.channel.send(f"❌ AI error from API: {error_msg}")
-else:
-    await message.channel.send("❌ AI error: Unexpected response format.")
-
-    except Exception as e:
-        await message.channel.send(f"❌ AI error: {e}")
+        if "choices" in result and result["choices"]:
+            reply = result["choices"][0]["message"]["content"]
+            await message.channel.send(reply)
+        elif "error" in result:
+            error_msg = result["error"].get("message", "Unknown error")
+            await message.channel.send(f"❌ AI error from API: {error_msg}")
+        else:
+            await message.channel.send("❌ AI error: Unexpected response format.")
 
 
 # Ejecuta el bot con tu token
