@@ -158,7 +158,7 @@ async def on_message(message):
                     "Content-Type": "application/json"
                 },
                 json={
-                    "model": "google/gemma-27b-it:free",
+                    "model": "google/gemma-3-27b-it:free",
                     "messages": [
                         {"role": "system", "content": system_msg},
                         {"role": "user", "content": prompt}
