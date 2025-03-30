@@ -2,3 +2,4 @@ discord.py
 gspread
 oauth2client
 openai
+httpx==0.26.0
