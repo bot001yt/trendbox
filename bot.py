@@ -175,8 +175,8 @@ async def on_message(message):
         else:
             await message.channel.send("❌ AI error: Unexpected response format.")
 
-except Exception as e:
-    await message.channel.send(f"❌ Error with AI response: {e}")
+    except Exception as e:
+        await message.channel.send(f"❌ Error with AI response: {e}")
 
 
 # Ejecuta el bot con tu token
