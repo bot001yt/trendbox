@@ -26,7 +26,7 @@ async def on_ready():
 
     await bot.change_presence(activity=discord.Activity(
         type=discord.ActivityType.competing,
-        name="la mejor tienda"
+        name="ser la mejor tienda👑"
     ))
 
     try:
