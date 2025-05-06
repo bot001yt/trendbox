@@ -276,7 +276,7 @@ async def xmr(interaction: discord.Interaction, cantidad: str = None):
 async def paypal(interaction: discord.Interaction, cantidad: str = None):
     msg = f"📩 Envíame el pago a: `{wallets['paypal']}`\n✅ Use **Friends & Family (F&F)**\n❌ No additional notes."
     if cantidad:
-        msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
+        msg += f"\n💵 Cantidad a pagar: **{cantidad}€**"
     await interaction.response.send_message(msg, ephemeral=True)
 
 # --- COMANDOS DE CONFIGURACIÓN ---
