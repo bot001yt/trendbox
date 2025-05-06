@@ -210,8 +210,6 @@ async def rename(interaction: discord.Interaction, nombre: str):
         await interaction.response.send_message(f"❌ Error al renombrar: {e}", ephemeral=True)
 
 
-bot.run(os.environ["TOKEN"])
-
 
 
 # === COMANDOS DE PAGO CON JSON PERSISTENTE ===
