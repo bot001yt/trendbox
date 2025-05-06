@@ -180,6 +180,144 @@ async def on_message(message):
         await message.channel.send(f"❌ Error with AI response: {e}")
 
 
+
+@bot.tree.command(name="done", description="Renombra el canal a 'done' (solo staff)", guild=GUILD_ID)
+async def done(interaction: discord.Interaction):
+    if not any(role.id == ROL_AUTORIZADO_ID for role in interaction.user.roles):
+        await interaction.response.send_message("❌ No tienes permisos para usar este comando.", ephemeral=True)
+        return
+
+    try:
+        await interaction.channel.edit(name="done")
+        await interaction.channel.send("✅ Canal renombrado a `done`", delete_after=5)
+    except Exception as e:
+        await interaction.response.send_message(f"❌ Error al renombrar: {e}", ephemeral=True)
+
+
+
+@bot.tree.command(name="rename", description="Renombra el canal actual (solo staff)", guild=GUILD_ID)
+@app_commands.describe(nombre="Nuevo nombre para el canal")
+async def rename(interaction: discord.Interaction, nombre: str):
+    if not any(role.id == ROL_AUTORIZADO_ID for role in interaction.user.roles):
+        await interaction.response.send_message("❌ No tienes permisos para usar este comando.", ephemeral=True)
+        return
+
+    try:
+        await interaction.channel.edit(name=nombre)
+        msg = await interaction.response.send_message(f"✅ Canal renombrado a `{nombre}`", ephemeral=False)
+        await interaction.channel.send(f"✅ Canal renombrado a `{nombre}`", delete_after=5)
+    except Exception as e:
+        await interaction.response.send_message(f"❌ Error al renombrar: {e}", ephemeral=True)
+
+
+bot.run(os.environ["TOKEN"])
+
+
+
+# === COMANDOS DE PAGO CON JSON PERSISTENTE ===
+
+import json
+
+WALLETS_FILE = "wallets.json"
+
+def cargar_wallets():
+    try:
+        with open(WALLETS_FILE, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {
+            "btc": "TU_DIRECCION_BTC",
+            "ltc": "TU_DIRECCION_LTC",
+            "sol": "TU_DIRECCION_SOL",
+            "xmr": "TU_DIRECCION_XMR",
+            "paypal": "tu@email.com"
+        }
+
+def guardar_wallets(wallets):
+    with open(WALLETS_FILE, "w") as f:
+        json.dump(wallets, f, indent=4)
+
+wallets = cargar_wallets()
+
+# --- COMANDOS DE PAGO ---
+
+@bot.tree.command(name="btc", description="Ver dirección BTC", guild=GUILD_ID)
+@app_commands.describe(cantidad="Cantidad en USD (opcional)")
+async def btc(interaction: discord.Interaction, cantidad: str = None):
+    msg = f"💰 Dirección de Bitcoin (BTC): `{wallets['btc']}`"
+    if cantidad:
+        msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
+    await interaction.response.send_message(msg, ephemeral=True)
+
+@bot.tree.command(name="ltc", description="Ver dirección LTC", guild=GUILD_ID)
+@app_commands.describe(cantidad="Cantidad en USD (opcional)")
+async def ltc(interaction: discord.Interaction, cantidad: str = None):
+    msg = f"💰 Dirección de Litecoin (LTC): `{wallets['ltc']}`"
+    if cantidad:
+        msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
+    await interaction.response.send_message(msg, ephemeral=True)
+
+@bot.tree.command(name="sol", description="Ver dirección SOL", guild=GUILD_ID)
+@app_commands.describe(cantidad="Cantidad en USD (opcional)")
+async def sol(interaction: discord.Interaction, cantidad: str = None):
+    msg = f"💰 Dirección de Solana (SOL): `{wallets['sol']}`"
+    if cantidad:
+        msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
+    await interaction.response.send_message(msg, ephemeral=True)
+
+@bot.tree.command(name="xmr", description="Ver dirección XMR", guild=GUILD_ID)
+@app_commands.describe(cantidad="Cantidad en USD (opcional)")
+async def xmr(interaction: discord.Interaction, cantidad: str = None):
+    msg = f"💰 Dirección de Monero (XMR): `{wallets['xmr']}`"
+    if cantidad:
+        msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
+    await interaction.response.send_message(msg, ephemeral=True)
+
+@bot.tree.command(name="paypal", description="Ver dirección PayPal", guild=GUILD_ID)
+@app_commands.describe(cantidad="Cantidad en USD (opcional)")
+async def paypal(interaction: discord.Interaction, cantidad: str = None):
+    msg = f"📩 Envíame el pago a: `{wallets['paypal']}`\n✅ Use **Friends & Family (F&F)**\n❌ No additional notes."
+    if cantidad:
+        msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
+    await interaction.response.send_message(msg, ephemeral=True)
+
+# --- COMANDOS DE CONFIGURACIÓN ---
+
+async def actualizar_wallet(interaction, key, valor):
+    if not any(role.id == ROL_AUTORIZADO_ID for role in interaction.user.roles):
+        await interaction.response.send_message("❌ No tienes permisos para usar este comando.", ephemeral=True)
+        return
+    wallets[key] = valor
+    guardar_wallets(wallets)
+    await interaction.response.send_message(f"✅ Dirección/correo actualizado para {key.upper()}.", ephemeral=True)
+
+@bot.tree.command(name="configbtc", description="Configurar dirección BTC", guild=GUILD_ID)
+@app_commands.describe(direccion="Nueva dirección BTC")
+async def configbtc(interaction: discord.Interaction, direccion: str):
+    await actualizar_wallet(interaction, "btc", direccion)
+
+@bot.tree.command(name="configltc", description="Configurar dirección LTC", guild=GUILD_ID)
+@app_commands.describe(direccion="Nueva dirección LTC")
+async def configltc(interaction: discord.Interaction, direccion: str):
+    await actualizar_wallet(interaction, "ltc", direccion)
+
+@bot.tree.command(name="configsol", description="Configurar dirección SOL", guild=GUILD_ID)
+@app_commands.describe(direccion="Nueva dirección SOL")
+async def configsol(interaction: discord.Interaction, direccion: str):
+    await actualizar_wallet(interaction, "sol", direccion)
+
+@bot.tree.command(name="configxmr", description="Configurar dirección XMR", guild=GUILD_ID)
+@app_commands.describe(direccion="Nueva dirección XMR")
+async def configxmr(interaction: discord.Interaction, direccion: str):
+    await actualizar_wallet(interaction, "xmr", direccion)
+
+@bot.tree.command(name="configpaypal", description="Configurar correo PayPal", guild=GUILD_ID)
+@app_commands.describe(correo="Nuevo correo PayPal")
+async def configpaypal(interaction: discord.Interaction, correo: str):
+    await actualizar_wallet(interaction, "paypal", correo)
+
+
+
 # Ejecuta el bot con tu token
 bot.run(os.environ["TOKEN"])
 
