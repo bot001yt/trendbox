@@ -214,7 +214,6 @@ async def rename(interaction: discord.Interaction, nombre: str):
 
 # === COMANDOS DE PAGO CON JSON PERSISTENTE ===
 
-import json
 
 WALLETS_FILE = "wallets.json"
 
@@ -241,43 +240,63 @@ wallets = cargar_wallets()
 
 @bot.tree.command(name="btc", description="Ver dirección BTC", guild=GUILD_ID)
 @app_commands.describe(cantidad="Cantidad en USD (opcional)")
-async def btc(interaction: discord.Interaction, cantidad: str = None):
+async def btc(
+    if interaction.user.id != 759447530722426890:
+        await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
+        return
+interaction: discord.Interaction, cantidad: str = None):
     msg = f"💰 Dirección de Bitcoin (BTC): `{wallets['btc']}`"
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
-    await interaction.response.send_message(msg, ephemeral=True)
+    await interaction.response.send_message(msg, ephemeral=False)
 
 @bot.tree.command(name="ltc", description="Ver dirección LTC", guild=GUILD_ID)
 @app_commands.describe(cantidad="Cantidad en USD (opcional)")
-async def ltc(interaction: discord.Interaction, cantidad: str = None):
+async def ltc(
+    if interaction.user.id != 759447530722426890:
+        await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
+        return
+interaction: discord.Interaction, cantidad: str = None):
     msg = f"💰 Dirección de Litecoin (LTC): `{wallets['ltc']}`"
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
-    await interaction.response.send_message(msg, ephemeral=True)
+    await interaction.response.send_message(msg, ephemeral=False)
 
 @bot.tree.command(name="sol", description="Ver dirección SOL", guild=GUILD_ID)
 @app_commands.describe(cantidad="Cantidad en USD (opcional)")
-async def sol(interaction: discord.Interaction, cantidad: str = None):
+async def sol(
+    if interaction.user.id != 759447530722426890:
+        await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
+        return
+interaction: discord.Interaction, cantidad: str = None):
     msg = f"💰 Dirección de Solana (SOL): `{wallets['sol']}`"
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
-    await interaction.response.send_message(msg, ephemeral=True)
+    await interaction.response.send_message(msg, ephemeral=False)
 
 @bot.tree.command(name="xmr", description="Ver dirección XMR", guild=GUILD_ID)
 @app_commands.describe(cantidad="Cantidad en USD (opcional)")
-async def xmr(interaction: discord.Interaction, cantidad: str = None):
+async def xmr(
+    if interaction.user.id != 759447530722426890:
+        await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
+        return
+interaction: discord.Interaction, cantidad: str = None):
     msg = f"💰 Dirección de Monero (XMR): `{wallets['xmr']}`"
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
-    await interaction.response.send_message(msg, ephemeral=True)
+    await interaction.response.send_message(msg, ephemeral=False)
 
 @bot.tree.command(name="paypal", description="Ver dirección PayPal", guild=GUILD_ID)
-@app_commands.describe(cantidad="Cantidad en USD (opcional)")
-async def paypal(interaction: discord.Interaction, cantidad: str = None):
+@app_commands.describe(cantidad="Cantidad en EUR (opcional)")
+async def paypal(
+    if interaction.user.id != 759447530722426890:
+        await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
+        return
+interaction: discord.Interaction, cantidad: str = None):
     msg = f"📩 Envíame el pago a: `{wallets['paypal']}`\n✅ Use **Friends & Family (F&F)**\n❌ No additional notes."
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **{cantidad}€**"
-    await interaction.response.send_message(msg, ephemeral=True)
+    await interaction.response.send_message(msg, ephemeral=False)
 
 # --- COMANDOS DE CONFIGURACIÓN ---
 
