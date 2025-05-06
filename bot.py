@@ -211,7 +211,6 @@ async def rename(interaction: discord.Interaction, nombre: str):
 
 
 
-
 # === COMANDOS DE PAGO CON JSON PERSISTENTE ===
 
 
@@ -332,4 +331,5 @@ async def configpaypal(interaction: discord.Interaction, correo: str):
 
 # Ejecuta el bot con tu token
 bot.run(os.environ["TOKEN"])
+
 
