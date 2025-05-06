@@ -20,6 +20,11 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 @bot.event
 async def on_ready():
     print(f"✅ Bot conectado como {bot.user}")
+
+  await bot.change_presence(activity=discord.Activity(
+        type=discord.ActivityType.competing,
+        name="la mejor tienda"
+    ))
     try:
         await bot.tree.sync(guild=GUILD_ID)
         print("🌐 Comandos sincronizados.")
