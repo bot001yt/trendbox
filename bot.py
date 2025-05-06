@@ -244,7 +244,6 @@ async def btc(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
-interaction: discord.Interaction, cantidad: str = None):
     msg = f"💰 Dirección de Bitcoin (BTC): `{wallets['btc']}`"
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
@@ -256,7 +255,6 @@ async def ltc(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
-interaction: discord.Interaction, cantidad: str = None):
     msg = f"💰 Dirección de Litecoin (LTC): `{wallets['ltc']}`"
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
@@ -268,7 +266,6 @@ async def sol(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
-interaction: discord.Interaction, cantidad: str = None):
     msg = f"💰 Dirección de Solana (SOL): `{wallets['sol']}`"
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
@@ -280,7 +277,6 @@ async def xmr(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
-interaction: discord.Interaction, cantidad: str = None):
     msg = f"💰 Dirección de Monero (XMR): `{wallets['xmr']}`"
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
@@ -292,7 +288,6 @@ async def paypal(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
-interaction: discord.Interaction, cantidad: str = None):
     msg = f"📩 Envíame el pago a: `{wallets['paypal']}`\n✅ Use **Friends & Family (F&F)**\n❌ No additional notes."
     if cantidad:
         msg += f"\n💵 Cantidad a pagar: **{cantidad}€**"
