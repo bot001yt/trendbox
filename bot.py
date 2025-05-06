@@ -7,6 +7,7 @@ from datetime import datetime
 from openai import OpenAI
 import json
 import httpx
+import asyncio
 
 TOKEN = os.getenv("DISCORD_TOKEN")
 GUILD_ID = discord.Object(id=1350837211209138298)  # Reemplaza con el ID de tu servidor
@@ -21,15 +22,19 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 async def on_ready():
     print(f"✅ Bot conectado como {bot.user}")
 
-  await bot.change_presence(activity=discord.Activity(
+    await asyncio.sleep(1)  # Espera 1 segundo antes de poner el status
+
+    await bot.change_presence(activity=discord.Activity(
         type=discord.ActivityType.competing,
         name="la mejor tienda"
     ))
+
     try:
         await bot.tree.sync(guild=GUILD_ID)
         print("🌐 Comandos sincronizados.")
     except Exception as e:
         print(f"⚠️ Error al sincronizar comandos: {e}")
+
 
 
 # --- COMANDO ADDVENTA ---
