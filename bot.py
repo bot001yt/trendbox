@@ -240,7 +240,7 @@ wallets = cargar_wallets()
 
 @bot.tree.command(name="btc", description="Ver dirección BTC", guild=GUILD_ID)
 @app_commands.describe(cantidad="Cantidad en USD (opcional)")
-async def btc(
+async def btc(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
@@ -252,7 +252,7 @@ interaction: discord.Interaction, cantidad: str = None):
 
 @bot.tree.command(name="ltc", description="Ver dirección LTC", guild=GUILD_ID)
 @app_commands.describe(cantidad="Cantidad en USD (opcional)")
-async def ltc(
+async def ltc(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
@@ -264,7 +264,7 @@ interaction: discord.Interaction, cantidad: str = None):
 
 @bot.tree.command(name="sol", description="Ver dirección SOL", guild=GUILD_ID)
 @app_commands.describe(cantidad="Cantidad en USD (opcional)")
-async def sol(
+async def sol(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
@@ -276,7 +276,7 @@ interaction: discord.Interaction, cantidad: str = None):
 
 @bot.tree.command(name="xmr", description="Ver dirección XMR", guild=GUILD_ID)
 @app_commands.describe(cantidad="Cantidad en USD (opcional)")
-async def xmr(
+async def xmr(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
@@ -288,7 +288,7 @@ interaction: discord.Interaction, cantidad: str = None):
 
 @bot.tree.command(name="paypal", description="Ver dirección PayPal", guild=GUILD_ID)
 @app_commands.describe(cantidad="Cantidad en EUR (opcional)")
-async def paypal(
+async def paypal(interaction: discord.Interaction, cantidad: str = None):
     if interaction.user.id != 759447530722426890:
         await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
         return
