@@ -236,7 +236,8 @@ def cargar_wallets():
             "ltc": "TU_DIRECCION_LTC",
             "sol": "TU_DIRECCION_SOL",
             "xmr": "TU_DIRECCION_XMR",
-            "paypal": "tu@email.com"
+            "paypal": "tu@email.com",
+            "eth": "TU_DIRECCION_ETH"
         }
 
 def guardar_wallets(wallets):
@@ -302,6 +303,18 @@ async def paypal(interaction: discord.Interaction, cantidad: str = None):
         msg += f"\n💵 Cantidad a pagar: **{cantidad}€**"
     await interaction.response.send_message(msg, ephemeral=False)
 
+@bot.tree.command(name="eth", description="Ver dirección ETH", guild=GUILD_ID)
+@app_commands.describe(cantidad="Cantidad en USD (opcional)")
+async def eth(interaction: discord.Interaction, cantidad: str = None):
+    if interaction.user.id != 759447530722426890:
+        await interaction.response.send_message("❌ Solo el dueño puede usar este comando.", ephemeral=True)
+        return
+
+    msg = f"💰 Dirección de Ethereum (ETH): `{wallets['eth']}`"
+    if cantidad:
+        msg += f"\n💵 Cantidad a pagar: **${cantidad}**"
+    await interaction.response.send_message(msg, ephemeral=False)
+
 # --- COMANDOS DE CONFIGURACIÓN ---
 
 async def actualizar_wallet(interaction, key, valor):
@@ -336,6 +349,11 @@ async def configxmr(interaction: discord.Interaction, direccion: str):
 @app_commands.describe(correo="Nuevo correo PayPal")
 async def configpaypal(interaction: discord.Interaction, correo: str):
     await actualizar_wallet(interaction, "paypal", correo)
+
+@bot.tree.command(name="configeth", description="Configurar dirección ETH", guild=GUILD_ID)
+@app_commands.describe(direccion="Nueva dirección ETH")
+async def configeth(interaction: discord.Interaction, direccion: str):
+    await actualizar_wallet(interaction, "eth", direccion)
 
 
 
